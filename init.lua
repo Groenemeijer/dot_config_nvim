@@ -1,6 +1,7 @@
--- ===========================
--- PORTABLE NEOVIM INIT.LUA
--- ===========================
+
+vim.o.shada = ""
+vim.g.mapleader = " "
+vim.o.shell = vim.env.SHELL or "/bin/sh"
 
 -- 1. Bootstrapper for all essential plugins
 local function ensure_plugin(name, url)
@@ -25,15 +26,12 @@ ensure_plugin("rainbow_csv", "https://github.com/mechatroner/rainbow_csv")
 -- ensure_plugin("csv.vim",           "https://github.com/chrisbra/csv.vim")
 -- ensure_plugin("markdown-preview.nvim", "https://github.com/iamcco/markdown-preview.nvim")
 
--- 2. Set leader key and shell
-vim.g.mapleader = " "
-vim.o.shell = vim.env.SHELL or "/bin/sh"
 
 -- 3. Mini.nvim plugin setups
 require("mini.basics").setup()
 require("mini.bracketed").setup()
 require("mini.bufremove").setup()
-require("mini.clue").setup()
+--require("mini.clue").setup()
 require("mini.comment").setup()
 require("mini.completion").setup()
 require("mini.cursorword").setup()
@@ -69,6 +67,7 @@ require("mini.ai").setup()
 require("mini.animate").setup()
 require("mini.diff").setup()
 require("mini.deps").setup()
+require("mini.align").setup()
 
 -- 4. Togleterm configuration
 require("toggleterm").setup({
