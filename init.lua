@@ -22,9 +22,16 @@ ensure_plugin("gitsigns.nvim", "https://github.com/lewis6991/gitsigns.nvim")
 ensure_plugin("conform.nvim", "https://github.com/stevearc/conform.nvim")
 ensure_plugin("rainbow_csv", "https://github.com/mechatroner/rainbow_csv")
 
--- Optional: add more plugins
--- ensure_plugin("csv.vim",           "https://github.com/chrisbra/csv.vim")
--- ensure_plugin("markdown-preview.nvim", "https://github.com/iamcco/markdown-preview.nvim")
+-- Install render-markdown.nvim (depends on nvim-treesitter and mini.nvim/mini.icons)
+ensure_plugin("render-markdown.nvim", "https://github.com/MeanderingProgrammer/render-markdown.nvim")
+-- Optional: Treesitter for markdown parsing (only if you don’t already have it)
+ensure_plugin("nvim-treesitter", "https://github.com/nvim-treesitter/nvim-treesitter")
+
+-- Configure render-markdown
+require("render-markdown").setup({
+    -- The plugin automatically toggles between raw and rendered views based on mode
+    -- Additional options can be added here (padding, borders, etc.)
+})
 
 
 -- 3. Mini.nvim plugin setups
@@ -145,6 +152,34 @@ miniclue.setup({
 		miniclue.gen_clues.z(),
 	},
 })
+
+-- mini.icons configuration
+-- Since you already install mini.nvim via ensure_plugin, there is no need to install anything else.
+-- Just require the module and call setup() with your preferences.
+
+-- Make sure Nerd Font symbols are available in your terminal.  If not,
+-- you can set style = 'ascii' to fall back to simple text icons:contentReference[oaicite:3]{index=3}.
+require('mini.icons').setup({
+  -- Choose between 'glyph' (default) or 'ascii'
+  style = 'glyph',
+  -- Override icons per category.  For example, customise some LSP icons:
+  lsp = {
+    Class    = '', -- new icon for classes
+    Function = '󰡱', -- new icon for functions
+    Variable = '󰆧', -- new icon for variables
+    Keyword  = '󰌋',
+  },
+  -- Override filetype icons (add or change only what you need)
+  filetype = {
+    markdown = { icon = '󰍔', hl = 'MiniNormal' },
+    lua      = { icon = '󰢱', hl = 'MiniNormal' },
+  },
+  -- Optional: restrict which extensions will be considered during file resolution
+  use_file_extension = function(ext, _)
+    return ext ~= 'bak'  -- don’t assign icons for .bak files
+  end,
+})
+
 vim.keymap.set("n", "<leader>F", function()
 	require("conform").format({ async = true })
 end, { desc = "Format buffer" })
@@ -306,3 +341,7 @@ vim.api.nvim_set_keymap("i", "<C-g>", 'copilot#Accept("<CR>")', { expr = true, s
 vim.keymap.set('n', '<Tab>',     ':bnext<CR>',     { desc = 'Next buffer' })
 vim.keymap.set('n', '<S-Tab>',   ':bprevious<CR>', { desc = 'Previous buffer' })
 
+-- Mappings to toggle rendered view
+vim.keymap.set("n", "<leader>rm", function()
+    require("render-markdown").toggle()
+end, { desc = "Toggle rendered Markdown view" })
