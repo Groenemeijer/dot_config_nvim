@@ -21,18 +21,16 @@ ensure_plugin("toggleterm.nvim", "https://github.com/akinsho/toggleterm.nvim")
 ensure_plugin("gitsigns.nvim", "https://github.com/lewis6991/gitsigns.nvim")
 ensure_plugin("conform.nvim", "https://github.com/stevearc/conform.nvim")
 ensure_plugin("rainbow_csv", "https://github.com/mechatroner/rainbow_csv")
-
--- Install render-markdown.nvim (depends on nvim-treesitter and mini.nvim/mini.icons)
 ensure_plugin("render-markdown.nvim", "https://github.com/MeanderingProgrammer/render-markdown.nvim")
--- Optional: Treesitter for markdown parsing (only if you don’t already have it)
 ensure_plugin("nvim-treesitter", "https://github.com/nvim-treesitter/nvim-treesitter")
+ensure_plugin("headlines", "https://github.com/lukas-reineke/headlines.nvim")
+ensure_plugin("bufferline", "https://github.com/akinsho/nvim-bufferline.lua")
 
 -- Configure render-markdown
 require("render-markdown").setup({
     -- The plugin automatically toggles between raw and rendered views based on mode
     -- Additional options can be added here (padding, borders, etc.)
 })
-
 
 -- 3. Mini.nvim plugin setups
 require("mini.basics").setup()
@@ -108,6 +106,24 @@ require("conform").setup({
 		-- Add more as needed
 	},
 })
+
+require("headlines").setup({
+    markdown = {
+        headline_highlights = {
+            "Headline1",
+            "Headline2",
+            "Headline3",
+            "Headline4",
+            "Headline5",
+            "Headline6",
+        },
+        codeblock_highlight = "CodeBlock",
+        dash_highlight = "Dash",
+        quote_highlight = "Quote",
+    },
+})
+
+
 local miniclue = require("mini.clue")
 miniclue.setup({
 	triggers = {
@@ -154,11 +170,6 @@ miniclue.setup({
 })
 
 -- mini.icons configuration
--- Since you already install mini.nvim via ensure_plugin, there is no need to install anything else.
--- Just require the module and call setup() with your preferences.
-
--- Make sure Nerd Font symbols are available in your terminal.  If not,
--- you can set style = 'ascii' to fall back to simple text icons:contentReference[oaicite:3]{index=3}.
 require('mini.icons').setup({
   -- Choose between 'glyph' (default) or 'ascii'
   style = 'glyph',
@@ -179,6 +190,20 @@ require('mini.icons').setup({
     return ext ~= 'bak'  -- don’t assign icons for .bak files
   end,
 })
+
+
+local highlights = require("nord").bufferline.highlights({
+    italic = true,
+    bold = true,
+})
+
+require("bufferline").setup({
+    options = {
+        separator_style = "slant",
+    },
+    highlights = highlights,
+})
+
 
 vim.keymap.set("n", "<leader>F", function()
 	require("conform").format({ async = true })
