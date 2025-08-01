@@ -1,4 +1,3 @@
-
 vim.o.shada = ""
 vim.g.mapleader = " "
 vim.o.shell = vim.env.SHELL or "/bin/sh"
@@ -28,8 +27,8 @@ ensure_plugin("bufferline", "https://github.com/akinsho/nvim-bufferline.lua")
 
 -- Configure render-markdown
 require("render-markdown").setup({
-    -- The plugin automatically toggles between raw and rendered views based on mode
-    -- Additional options can be added here (padding, borders, etc.)
+	-- The plugin automatically toggles between raw and rendered views based on mode
+	-- Additional options can be added here (padding, borders, etc.)
 })
 
 -- 3. Mini.nvim plugin setups
@@ -99,30 +98,41 @@ require("conform").setup({
 		yaml = { "prettier" },
 		jinja = { "prettier" },
 		toml = { "prettier" },
-		php = { "prettier" },
+		php = { "php_cs_fixer" },
 		go = { "prettier" },
 		rust = { "prettier" },
 		xml = { "prettier" },
 		-- Add more as needed
 	},
+	formatters = {
+		php_cs_fixer = {
+			command = "php-cs-fixer",
+			args = {
+				"fix",
+				"--quiet",
+				"--using-cache=no",
+				"$FILENAME",
+			},
+			stdin = false,
+		},
+	},
 })
 
 require("headlines").setup({
-    markdown = {
-        headline_highlights = {
-            "Headline1",
-            "Headline2",
-            "Headline3",
-            "Headline4",
-            "Headline5",
-            "Headline6",
-        },
-        codeblock_highlight = "CodeBlock",
-        dash_highlight = "Dash",
-        quote_highlight = "Quote",
-    },
+	markdown = {
+		headline_highlights = {
+			"Headline1",
+			"Headline2",
+			"Headline3",
+			"Headline4",
+			"Headline5",
+			"Headline6",
+		},
+		codeblock_highlight = "CodeBlock",
+		dash_highlight = "Dash",
+		quote_highlight = "Quote",
+	},
 })
-
 
 local miniclue = require("mini.clue")
 miniclue.setup({
@@ -170,40 +180,38 @@ miniclue.setup({
 })
 
 -- mini.icons configuration
-require('mini.icons').setup({
-  -- Choose between 'glyph' (default) or 'ascii'
-  style = 'glyph',
-  -- Override icons per category.  For example, customise some LSP icons:
-  lsp = {
-    Class    = '', -- new icon for classes
-    Function = '󰡱', -- new icon for functions
-    Variable = '󰆧', -- new icon for variables
-    Keyword  = '󰌋',
-  },
-  -- Override filetype icons (add or change only what you need)
-  filetype = {
-    markdown = { icon = '󰍔', hl = 'MiniNormal' },
-    lua      = { icon = '󰢱', hl = 'MiniNormal' },
-  },
-  -- Optional: restrict which extensions will be considered during file resolution
-  use_file_extension = function(ext, _)
-    return ext ~= 'bak'  -- don’t assign icons for .bak files
-  end,
+require("mini.icons").setup({
+	-- Choose between 'glyph' (default) or 'ascii'
+	style = "glyph",
+	-- Override icons per category.  For example, customise some LSP icons:
+	lsp = {
+		Class = "", -- new icon for classes
+		Function = "󰡱", -- new icon for functions
+		Variable = "󰆧", -- new icon for variables
+		Keyword = "󰌋",
+	},
+	-- Override filetype icons (add or change only what you need)
+	filetype = {
+		markdown = { icon = "󰍔", hl = "MiniNormal" },
+		lua = { icon = "󰢱", hl = "MiniNormal" },
+	},
+	-- Optional: restrict which extensions will be considered during file resolution
+	use_file_extension = function(ext, _)
+		return ext ~= "bak" -- don’t assign icons for .bak files
+	end,
 })
 
-
 local highlights = require("nord").bufferline.highlights({
-    italic = true,
-    bold = true,
+	italic = true,
+	bold = true,
 })
 
 require("bufferline").setup({
-    options = {
-        separator_style = "slant",
-    },
-    highlights = highlights,
+	options = {
+		separator_style = "thin",
+	},
+	highlights = highlights,
 })
-
 
 vim.keymap.set("n", "<leader>F", function()
 	require("conform").format({ async = true })
@@ -243,7 +251,8 @@ vim.cmd.colorscheme("nord")
 vim.api.nvim_set_hl(0, "StatusLine", { fg = "#2e3440", bg = "#88c0d0", bold = true })
 vim.api.nvim_set_hl(0, "MiniIndentscopeSymbol", { fg = "#434c5e", nocombine = true })
 vim.api.nvim_set_hl(0, "CursorColumn", { bg = "#343948" })
-vim.api.nvim_set_hl(0, "CursorLine",   { bg = "#343948" })
+vim.api.nvim_set_hl(0, "CursorLine", { bg = "#343948" })
+vim.opt.cmdheight = 0
 
 
 -- 10. MiniFiles, MiniPick, and navigation keymaps
@@ -363,20 +372,19 @@ vim.g.copilot_no_tab_map = true
 vim.api.nvim_set_keymap("i", "<C-g>", 'copilot#Accept("<CR>")', { expr = true, silent = true, noremap = true })
 
 -- 19. Buffer navigation: <Tab> and <S-Tab> to switch buffers
-vim.keymap.set('n', '<Tab>',     ':bnext<CR>',     { desc = 'Next buffer' })
-vim.keymap.set('n', '<S-Tab>',   ':bprevious<CR>', { desc = 'Previous buffer' })
+vim.keymap.set("n", "<Tab>", ":bnext<CR>", { desc = "Next buffer" })
+vim.keymap.set("n", "<S-Tab>", ":bprevious<CR>", { desc = "Previous buffer" })
 
 -- Mappings to toggle rendered view
 vim.keymap.set("n", "<leader>rm", function()
-    require("render-markdown").toggle()
+	require("render-markdown").toggle()
 end, { desc = "Toggle rendered Markdown view" })
 -- Trim all trailing whitespace in the current buffer
 vim.keymap.set("n", "<leader>ts", function()
-  require("mini.trailspace").trim()
+	require("mini.trailspace").trim()
 end, { desc = "Trim trailing whitespace" })
 
 -- Trim trailing empty lines at end of file
 vim.keymap.set("n", "<leader>te", function()
-  require("mini.trailspace").trim_last_lines()
+	require("mini.trailspace").trim_last_lines()
 end, { desc = "Trim trailing empty lines" })
-
