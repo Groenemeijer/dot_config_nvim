@@ -345,3 +345,13 @@ vim.keymap.set('n', '<S-Tab>',   ':bprevious<CR>', { desc = 'Previous buffer' })
 vim.keymap.set("n", "<leader>rm", function()
     require("render-markdown").toggle()
 end, { desc = "Toggle rendered Markdown view" })
+-- Trim all trailing whitespace in the current buffer
+vim.keymap.set("n", "<leader>ts", function()
+  require("mini.trailspace").trim()
+end, { desc = "Trim trailing whitespace" })
+
+-- Trim trailing empty lines at end of file
+vim.keymap.set("n", "<leader>te", function()
+  require("mini.trailspace").trim_last_lines()
+end, { desc = "Trim trailing empty lines" })
+
